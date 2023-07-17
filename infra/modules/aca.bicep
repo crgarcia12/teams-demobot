@@ -3,14 +3,41 @@ param location string = resourceGroup().location
 
 param containerAppEnvironmentId string
 param repositoryImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
-param envVars array = []
 param registryName string
 param minReplicas int = 1
 param maxReplicas int = 1
+param appInsightsInstrumentationKey string 
+param appInsightsConnectionString string 
+param appConfigConnectionString string 
 
 var name = '${environmentPrefix}-aca'
 var registryPassword = listCredentials(resourceId('Microsoft.ContainerRegistry/registries', registryName), '2022-12-01').passwords[0].value
 var registryUsername = listCredentials(resourceId('Microsoft.ContainerRegistry/registries', registryName), '2022-12-01').username //2021-06-01-preview
+
+// create the various config pairs
+var envVars = [
+  {
+    name: 'ASPNETCORE_ENVIRONMENT'
+    value: 'Development'
+  }
+  {
+    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+    value: appInsightsInstrumentationKey
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: appInsightsConnectionString
+  }
+  {
+    name: 'AzureAppConfig'
+    value: appConfigConnectionString
+  }
+  {
+    name: 'RevisionLabel'
+    value: 'BetaDisabled'
+  }
+]
+
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
   name: name

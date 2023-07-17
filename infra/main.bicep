@@ -33,30 +33,6 @@ module appConfig 'modules/app_config.bicep' ={
   }
 }
 
-// create the various config pairs
-var shared_config = [
-  {
-    name: 'ASPNETCORE_ENVIRONMENT'
-    value: 'Development'
-  }
-  {
-    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: env.outputs.appInsightsInstrumentationKey
-  }
-  {
-    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-    value: env.outputs.appInsightsConnectionString
-  }
-  {
-    name: 'AzureAppConfig'
-    value: appConfig.outputs.appConfigConnectionString
-  }
-  {
-    name: 'RevisionLabel'
-    value: 'BetaDisabled'
-  }
-]
-
 module acr 'modules/acr.bicep' = {
   scope: resourceGroup
   name: 'acr'
@@ -67,7 +43,6 @@ module acr 'modules/acr.bicep' = {
 }
 
 var acrName = replace(toLower('${environmentPrefix}-acr'), '-', '')
-// create the service container app
 module frontend 'modules/aca.bicep' = {
   scope: resourceGroup
   name: 'frontend'
@@ -76,7 +51,9 @@ module frontend 'modules/aca.bicep' = {
     location: location
     containerAppEnvironmentId: env.outputs.id
     registryName: acrName
-    envVars: shared_config
+    appInsightsInstrumentationKey: env.outputs.appInsightsInstrumentationKey
+    appInsightsConnectionString: env.outputs.appInsightsConnectionString
+    appConfigConnectionString: appConfig.outputs.appConfigConnectionString
   }
   // We need dependson because biceps does not know that acr.name should be a dependency
   dependsOn: [
@@ -85,8 +62,3 @@ module frontend 'modules/aca.bicep' = {
     acr
   ]
 }
-
-
-// /subscriptions/14506188-80f8-4dc6-9b28-250051fc4ee4/resourceGroups/crgar-aca-bot-rg/providers/Microsoft.ContainerRegistry/registries/crgaracabotacr
-// /subscriptions/14506188-80f8-4dc6-9b28-250051fc4ee4/providers/Microsoft.ContainerRegistry/registries/crgaracabotacr
-// /subscriptions/14506188-80f8-4dc6-9b28-250051fc4ee4/resourceGroups/crgar-aca-bot-rg/providers/Microsoft.ContainerRegistry/registries/crgaracabotacr
