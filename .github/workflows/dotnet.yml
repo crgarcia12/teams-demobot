@@ -1,0 +1,33 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: BuildBot
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  REGISTRY_LOGIN_SERVER: crgaracabotacr.azurecr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+       client-id: ${{ secrets.AZURE_CLIENT_ID }}
+       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Build and push image
+      id: build-image
+      run: |
+       cd src
+       az acr build --image ${{ env.REGISTRY_LOGIN_SERVER }}/bot:${{ github.sha }} --registry ${{ env.REGISTRY_LOGIN_SERVER }} --file "Dockerfile" .
+       az acr build --image ${{ env.REGISTRY_LOGIN_SERVER }}/bot:latest --registry ${{ env.REGISTRY_LOGIN_SERVER }} --file "Dockerfile" .
