@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.11" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.19.0-rc0" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.19.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="0.17.230629.1-preview" />
   </ItemGroup>
 
   <ItemGroup>
