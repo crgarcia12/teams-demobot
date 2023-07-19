@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "File system";
+}
+<h1>Call the worker</h1>
+<div class="text-center">
+    <input type="button" value="Call the Worker directy 1000 times" onclick="location.href='@Url.Action("CallApi", "CallWorker", new { callMethod = "Direct" })'" />
+    <input type="button" value="Call the Worker with DAPR 1000 times" onclick="location.href='@Url.Action("CallApi", "CallWorker", new { callMethod = "DAPR" })'" />
+</div>
+<p></p>
+@if (@ViewBag.ApiCounters != null) {
+    <p>Workers results</p>
+    <div class="text-center">
+        <table>
+            <tr>
+                <th>Number</th>
+                <th>Count</th>
+            </tr>
+            @{
+                for (int index = 0; index < 11; index++)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@ViewBag.ApiCounters[index]</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+}

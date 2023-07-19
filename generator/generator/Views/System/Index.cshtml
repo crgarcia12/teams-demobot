@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "System";
+}
+<h1>Environment Variables</h1>
+
+
+<div class="text-center">
+    <table>
+        <tr>
+            <th>Variable</th>
+            <th>Value</th>
+        </tr>
+        @foreach (string[] variable in ViewBag.Variables)
+        {
+            <tr>
+                <td>@variable[0]</td>
+                <td>@variable[1]</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<p></p>
+<p></p>
+
+@if(@ViewBag.Files != null) {
+    <h1>Mounted Files</h1>
+    <div class="text-center">
+        <table>
+            <tr>
+                <th>File Name</th>
+            </tr>
+            @foreach (string file in ViewBag.Files)
+            {
+                <tr>
+                    <td>@file</td>
+                </tr>
+            }
+        </table>
+    </div>
+}

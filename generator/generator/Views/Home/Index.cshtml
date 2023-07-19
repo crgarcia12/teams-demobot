@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    @{
+        if (String.IsNullOrEmpty(ViewBag.EnvironmentColor))
+        {
+            <p>This is a generic environment</p>
+        }
+        else
+        {
+            string imgUrl = $"images/{ViewBag.EnvironmentColor}.jpg";
+            <img src = @imgUrl>
+        }
+    }
+</div>
